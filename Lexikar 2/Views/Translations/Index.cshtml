@@ -1,0 +1,101 @@
+﻿@using X.PagedList.Mvc.Core;
+@model X.PagedList.IPagedList<Lexikar_2.Models.Translation>
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+@using (Html.BeginForm("Index", "Translations", FormMethod.Get))
+{
+    <p>
+        Search in Original and Translated: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+        <input type="submit" value="Search" />
+    </p>
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Nominal)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Verbal)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Other)
+            </th>
+            <th>
+                @Html.ActionLink(Html.DisplayNameFor(model => model.FirstOrDefault().Original), "Index", new { sortOrder = ViewBag.OriginalSortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th>
+                @Html.ActionLink(Html.DisplayNameFor(model => model.FirstOrDefault().Translated), "Index", new { sortOrder = ViewBag.TranslatedSortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Source)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Definition)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Systematics)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Note)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nominal)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Verbal)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Other)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Original)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Translated)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Source)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Definition)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Systematics)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Note)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+
+@Html.PagedListPager(Model, page => Url.Action("Index", "Translations",
+     new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
